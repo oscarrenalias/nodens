@@ -40,13 +40,7 @@ module.exports = function(grunt) {
   	    }
   	  }
     },
-
-    mochaTest: {
-      test: {
-        src: [ 'test/*.js' ]
-      }
-    },
-
+    
     nodeunit: {
       all: ['test/*.js']
     },
