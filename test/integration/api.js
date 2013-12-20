@@ -23,7 +23,7 @@ var requests = {
     simple: {   // basic test request
         ip: "1.2.3.4",
         host: "www.test.com",
-        TTL: "10",
+        ttl: "10",
         expires: "3600",
         type: "A"
     }
