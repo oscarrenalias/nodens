@@ -20,5 +20,8 @@
 	    "grunt-contrib-nodeunit": "0.2.x",
 	    "load-grunt-tasks": "~0.2.0",
 	    "time-grunt": "~0.2.1"
+	},
+  	"engines": {
+    	"node": "~0.10.5"
 	}
 }
