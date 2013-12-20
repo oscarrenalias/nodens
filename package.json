@@ -3,10 +3,12 @@
 	"name": "nodens",
 	"dependencies": {
 		"q": "0.9.x",
+        "q-io": "1.10.x",
 		"native-dns": "0.4.1",
 		"log4js": "0.6.x",
 		"restify": "2.6.1",
-		"tingodb": "0.1.x"
+		"tingodb": "0.1.x",
+        "underscore": "latest"
 	},
 	"devDependencies": {
 		"nodeunit": "= 0.7.4",
