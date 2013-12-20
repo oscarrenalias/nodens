@@ -10,6 +10,7 @@ var testLookup = {	// test lookup data
 	ip: "1.2.3.4",
 	host: "www.test.com",
 	TTL: "10",
+    expires: "3600",
 	type: "A"
 }
 
