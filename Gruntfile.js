@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 
     concurrent: {
         server: {
-            tasks: ['nodemon', 'watch'],
+            tasks: ['nodemon', 'watch', 'test'],
             options: {
                 logConcurrentOutput: true
             }
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         dev: {
           options: {
             file: 'app.js',
-            ignoredFiles: [ "package.json", "README.md" ]  
+            ignoredFiles: [ "package.json", "README.md", ".idea/*", "db", "test/db" ]
           }          
         }
     },
@@ -40,20 +40,21 @@ module.exports = function(grunt) {
   	    }
   	  }
     },
-    
+
     nodeunit: {
-      all: ['test/*.js']
+      unit: ['test/*.js'],
+      integration: [ 'test/integration/*.js']
     },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       js: {
-        files: ['app.js,lib/*.js'],
-        tasks: ['newer:jshint:all']
+        files: ['app.js, lib/*.js'],
+        tasks: ['jshint', 'test']
       },
       jsTest: {
-        files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test']
+        files: ['test/*.js'],
+        tasks: ['jshint', 'test']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -63,5 +64,6 @@ module.exports = function(grunt) {
 
   // the default task can be run just by typing "grunt" on the command line
   grunt.registerTask('default', ['concurrent:server'])
-  grunt.registerTask('test', ['nodeunit'])
+  grunt.registerTask('test', ['nodeunit:unit'])
+  grunt.registerTask('integration-test', ['nodeunit:integration'])
 };
