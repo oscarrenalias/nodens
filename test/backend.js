@@ -1,7 +1,7 @@
 var assert = require('assert'),
 	Backend = require('../lib/backend.js'),
 	config = {	// custom store configuration
-		dbPath: './db',
+		dbPath: './test/db',
 		collName: 'lookups'
 	},
 	store = new Backend(config);
@@ -34,6 +34,17 @@ module.exports = {
 
 		store.doReverseLookup('1.2.3.4').then(function(result) {
 			test.equal(result.host, testLookup.host)
+		}).fail(failed).finally(test.done);
+	},
+
+	testDeleteLookup: function(test) {
+		test.expect(1);
+
+		store.deleteLookup(testLookup.host).then(function(item) {
+			return(store.doLookup('www.test.com'));
+		}).then(function(result) {
+            // null indicates that it wasn't found
+			test.equal(result, null);
 		}).fail(failed).finally(test.done);
 	}
 }
