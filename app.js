@@ -1,17 +1,12 @@
 var DNSServer = require("./lib/dns"),
     APIServer = require("./lib/api"),
     BackendStorage = require('./lib/backend'),
-	config = {	// TODO: move me to real configuration!
-		storage: {
-			dbPath: '../db',
-			collName: 'lookups'
-		}
-	}
+	config = require("./config"),
     backend = new BackendStorage(config.storage),
     dnsServer = new DNSServer(backend),
     apiServer = new APIServer(backend),
-    dnsPort = 53,
-    apiPort = 8053;
+    dnsPort = process.env.DNSPORT || config.ports.dns,
+    apiPort = process.env.APIPORT || config.ports.api;
 
 dnsServer.serve(dnsPort);
 apiServer.serve(apiPort);
