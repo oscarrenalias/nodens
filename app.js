@@ -1,7 +1,7 @@
 var DNSServer = require("./lib/dns"),
     APIServer = require("./lib/api"),
     BackendStorage = require('./lib/backend'),
-	config = require("./config"),
+    config = require("./config"),
     backend = new BackendStorage(config.storage),
     dnsServer = new DNSServer(backend),
     apiServer = new APIServer(backend),
