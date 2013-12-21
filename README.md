@@ -38,12 +38,14 @@ RESTful API
 ===========
 The API exposes basic functionality for registering new names in the database, updating and deleting existing ones, and doing name lookups (normal lookups as well as reverse lookups).
 
+Requests and responses will be served using the ```application/json``` content type.
+
 Responses
 ---------
 Unless indicated otherwise, API calls follow these conventions:
 
 - HTTP 200 code in case of successful operations
-- HTTP 404 code in case the requested could not find the requested entity, e.g. do a name lookup for a host that is not in the dabase
+- HTTP 404 code in case the requested could not find the requested entity, e.g. do a name lookup for a host that is not in the database.
 - HTTP 500 code in all other scenarios
 
 Error response responses will always contain the following error structure in addition to the HTTP error code:
