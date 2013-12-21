@@ -8,7 +8,7 @@ module.exports = {
         test.expect(1);
 
         client.resolve({name: 'www.google.com', type: 'A' }).then(function(response) {
-            logger.debug(JSON.stringify(response));
+            logger.debug(JSON.stringify(response))
             test.ok(response != null);
         }).fail(function(err) {
             logger.error(err);

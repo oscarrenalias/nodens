@@ -21,8 +21,8 @@ apiServer.serve(testApiServerPort);
 // test request
 var requests = {
     simple: {   // basic test request
-        ip: "1.2.3.4",
-        host: "www.test.com",
+        address: "1.2.3.4",
+        name: "www.test.com",
         ttl: "10",
         expires: "3600",
         type: "A"
@@ -45,14 +45,14 @@ module.exports = {
 
     "Query the previous lookup": function(test) {
         test.expect(1);
-        client.getAsJson(testUrl + "/lookup/" + requests.simple.host).then(function(result) {
-            test.equals(result.host, requests.simple.host);
+        client.getAsJson(testUrl + "/lookup/" + requests.simple.name).then(function(result) {
+            test.equals(result[0].name, requests.simple.name);
         }).fail(failed).finally(test.done);
     },
 
     "Delete a lookup": function(test) {
         test.expect(1);
-        client.delete(testUrl + "/lookup/" + requests.simple.host).then(function(result) {
+        client.delete(testUrl + "/lookup/" + requests.simple.name).then(function(result) {
             // it's good enough if something comes back
             test.ok(true);
         }).fail(failed).finally(test.done);
@@ -60,7 +60,7 @@ module.exports = {
 
     "Query the deleted lookup": function(test) {
         test.expect(1);
-        client.getAsJson(testUrl + "/lookup/" + requests.simple.host).then(function(result) {
+        client.getAsJson(testUrl + "/lookup/" + requests.simple.name).then(function(result) {
             // this shouldn't happen
             test.ok(false);
         }).fail(function(err) {

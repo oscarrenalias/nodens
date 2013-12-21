@@ -7,8 +7,8 @@ var assert = require('assert'),
 	store = new Backend(config);
 
 var testLookup = {	// test lookup data
-	ip: "1.2.3.4",
-	host: "www.test.com",
+	address: "1.2.3.4",
+	name: "www.test.com",
 	TTL: "10",
     expires: "3600",
 	type: "A"
@@ -26,7 +26,7 @@ module.exports = {
 		store.updateLookup(testLookup).then(function(item) {
 			return(store.doLookup('www.test.com'));
 		}).then(function(result) {
-			test.equal(result.ip, testLookup.ip);
+			test.equal(result[0].ip, testLookup.ip);
 		}).fail(failed).finally(test.done);
 	},
 
@@ -41,11 +41,11 @@ module.exports = {
 	testDeleteLookup: function(test) {
 		test.expect(1);
 
-		store.deleteLookup(testLookup.host).then(function(item) {
+		store.deleteLookup(testLookup.name).then(function(item) {
 			return(store.doLookup('www.test.com'));
 		}).then(function(result) {
             // null indicates that it wasn't found
-			test.equal(result, null);
+			test.equal(result[0], null);
 		}).fail(failed).finally(test.done);
 	}
 }
