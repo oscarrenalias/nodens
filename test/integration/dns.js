@@ -2,13 +2,15 @@
 // Integration tests for the DNS server
 //
 var DNSServer = require("../../lib/dns"),
+    Q = require("q"),
+    _ = require("underscore"),
     mockBackend = {
         doLookup: function(hostName) {
             return(Q({host: 'www.test.com', ip: '1.2.3.4', ttl: 10, type: 'A' }))
         }
     }
     dnsServer = new DNSServer(mockBackend),
-    testDnsPort = 5353,
+    testDnsPort = 8765,
     logger = require('log4js').getLogger('net.renalias.nodens.tests.api'),
     server = { address: '127.0.0.1', port: testDnsPort, type: 'udp' },
     dns = require('native-dns');
@@ -17,7 +19,7 @@ var DNSServer = require("../../lib/dns"),
 dnsServer.serve(testDnsPort);
 
 module.exports = {
-    "Test simple query": function(test) {
+    "Simple query, existing lookup": function(test) {
         test.expect(1);
 
         // set up the question and the request
