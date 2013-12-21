@@ -3,3 +3,4 @@ node_modules
 db/lookups
 *.iml
 .idea
+*.DS_Store
