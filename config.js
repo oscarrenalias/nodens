@@ -6,6 +6,6 @@ module.exports = {
 
     ports: {
         api: 8053,
-        dns: 5353
+        dns: 15353
     }
 };
