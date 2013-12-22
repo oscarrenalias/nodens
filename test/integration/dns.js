@@ -6,7 +6,7 @@ var DNSServer = require("../../lib/dns"),
     _ = require("underscore"),
     mockBackend = {
         doLookup: function(hostName) {
-            return(Q({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 }))
+            return(Q([{name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 }]))
         }
     }
     dnsServer = new DNSServer(mockBackend),
@@ -38,7 +38,7 @@ module.exports = {
         });
 
         req.on('timeout', function(err) {
-            test.ok(false);
+            test.ok(false, "Request timed out");
             test.done();
         })
 
