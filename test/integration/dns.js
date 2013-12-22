@@ -6,7 +6,7 @@ var DNSServer = require("../../lib/dns"),
     _ = require("underscore"),
     mockBackend = {
         doLookup: function(hostName) {
-            return(Q({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 'A' }))
+            return(Q({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 }))
         }
     }
     dnsServer = new DNSServer(mockBackend),
@@ -23,7 +23,7 @@ module.exports = {
         test.expect(1);
 
         // set up the question and the request
-        var question = dns.Question({ name: 'www.test.com', type: 'A' });
+        var question = dns.Question({ name: 'www.test.com', type: 1 });
         var req = dns.Request({
             question: question,
             server: server,

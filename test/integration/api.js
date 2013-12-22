@@ -25,7 +25,7 @@ var requests = {
         name: "www.test.com",
         ttl: "10",
         expires: "3600",
-        type: "A"
+        type: 1
     }
 }
 
