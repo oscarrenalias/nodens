@@ -6,6 +6,9 @@ Current features:
 
 - RESTful API to maintain the name database
 - Basic resolution of DNS queries
+- Proxying of requests to a real DNS server
+
+Keep in mind that only the following DNS record types are supported: A, AAAA, NS, CNAME, PTR, NAPTR, TXT, MX, SRV, SOA
 
 Getting started
 ===============
@@ -14,7 +17,7 @@ Run these to get started:
 ```
 npm install
 node app.js
-curl -X PUT -H "Content-Type: application/json" http://localhost:8053/lookup -d '{ "ip": "1.2.3.4", "host": "www.test.com", "ttl": "10", "expires": "3600", "type": "A" }'
+curl -X PUT -H "Content-Type: application/json" http://localhost:8053/lookup -d '{ "address": "1.2.3.4", "name": "www.test.com", "ttl": "10", "expires": "3600", "type": 1 }'
 dig @127.0.0.1 -p 5353 www.test.com
 ```
 
@@ -60,11 +63,21 @@ Adds or updates a record in the name database. The key for the operation is the 
 
 Method: PUT 
 URL: /lookup
-Body: A JSON object with data for the DNS record, example:
+Body: A JSON object with data for the DNS record, example for an A record:
 
 ```
-{ "ip": "1.2.3.4", "host": "www.test.com", "ttl": "10", "expires": "3600", "type": "A" }
+{ "address": "1.2.3.4", "name": "www.test.com", "ttl": "10", "expires": "3600", "type": 1 }
 ````
+
+Message fields:
+
+- address: specifies the IP address for the name record
+- name: specifies the name of the host that is mapped to the given address
+- ttl: DNS time-to-live, in seconds
+- expires: validity period of the name record for the server, in seconds
+- type: numeric DNS record type, one of the following: 1 (A), 28 (AAAA), 2 (NS), 5 (CNAME), 12 (PTR), 35 (NAPTR), 16 (TXT), MX (15), SRV (33), SOA (6)
+
+Other record types will require different information; unfortunately those have not been thoroughly tested yet and the specific list of fields required in a message is not documented.
 
 Do lookup
 ---------
@@ -92,4 +105,3 @@ The following features are in the pipeline:
 
 - Implement support DNS round-robin
 - Honor the "expires" attribute
-- Forward the request to an upstream DNS server when a host name cannot be resolved (so NodeNS would effectively act as a DNS proxy)
