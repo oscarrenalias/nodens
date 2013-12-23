@@ -3,6 +3,7 @@
 //
 var HttpClient = require('../../lib/simplehttpclient.js'),
     client = new HttpClient(),
+    Q = require('q'),
     Backend = require('../../lib/backend.js'),
     config = {	// custom store configuration
         dbPath: './test/db',
@@ -19,15 +20,29 @@ var HttpClient = require('../../lib/simplehttpclient.js'),
 apiServer.serve(testApiServerPort);
 
 // test request
-var requests = {
-    simple: {   // basic test request
+var requests = [
+    {   // basic test request
         address: "1.2.3.4",
         name: "www.test.com",
         ttl: "10",
         expires: "3600",
         type: 1
-    }
-}
+    },
+    {   // second address for the same name
+        address: "1.2.3.5",
+        name: "www.test1.com",
+        ttl: "10",
+        expires: "3600",
+        type: 1
+    },
+    {   // second address for the same name
+        address: "1.2.3.6",
+        name: "www.test1.com",
+        ttl: "10",
+        expires: "3600",
+        type: 1
+    }    
+]
 
 // Helper function to force an error
 function failed(err) {
@@ -38,21 +53,21 @@ function failed(err) {
 module.exports = {
     "Insert a lookup": function(test) {
         test.expect(1);
-        client.putAsJson(testUrl + "/lookup", requests.simple).then(function(result) {
+        client.putAsJson(testUrl + "/lookup", requests[0]).then(function(result) {
             test.ok(result != null)
         }).fail(failed).finally(test.done);
     },
 
     "Query the previous lookup": function(test) {
         test.expect(1);
-        client.getAsJson(testUrl + "/lookup/" + requests.simple.name).then(function(result) {
-            test.equals(result[0].name, requests.simple.name);
+        client.getAsJson(testUrl + "/lookup/" + requests[0].name).then(function(result) {
+            test.equals(result[0].name, requests[0].name);
         }).fail(failed).finally(test.done);
     },
 
     "Delete a lookup": function(test) {
         test.expect(1);
-        client.delete(testUrl + "/lookup/" + requests.simple.name).then(function(result) {
+        client.delete(testUrl + "/lookup/" + requests[0].name).then(function(result) {
             // it's good enough if something comes back
             test.ok(true);
         }).fail(failed).finally(test.done);
@@ -60,12 +75,28 @@ module.exports = {
 
     "Query the deleted lookup": function(test) {
         test.expect(1);
-        client.getAsJson(testUrl + "/lookup/" + requests.simple.name).then(function(result) {
+        client.getAsJson(testUrl + "/lookup/" + requests[0].name).then(function(result) {
             // this shouldn't happen
             test.ok(false);
         }).fail(function(err) {
             // a failure is what we want
             test.ok(true);
+        }).finally(test.done);
+    },
+
+    "Insert and query two lookups for the same host": function(test) {
+        test.expect(1);
+        Q.all([
+            client.putAsJson(testUrl + "/lookup", requests[1]),
+            client.putAsJson(testUrl + "/lookup", requests[2])
+        ]).then(function(results) {
+            // check that we get two name lookups for the given host
+            return(client.getAsJson(testUrl + "/lookup/" + requests[2].name));
+            test.ok(true);
+        }).then(function(results) {
+            test.equals(2, results.length);
+        }).fail(function(err) {
+            test.ok(false, "Could not insert two lookups for the same host");
         }).finally(test.done);
     },
 
