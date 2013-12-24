@@ -1,4 +1,6 @@
-FROM ubuntu:latest
+# Maintained by dotCloud, shoudl be reliable
+# See: https://index.docker.io/u/stackbrew/ubuntu/
+FROM stackbrew/ubuntu:13.10
 
 # Update the APT cache
 RUN sed -i.bak 's/main$/main universe/' /etc/apt/sources.list
@@ -17,7 +19,7 @@ RUN echo 'root:password' | chpasswd
 
 # Hack for initctl
 RUN dpkg-divert --local --rename --add /sbin/initctl
-RUN ln -s /bin/true /sbin/initctl
+#RUN ln -s /bin/true /sbin/initctl
 
 # Install nodens
 ADD . /opt/nodens
