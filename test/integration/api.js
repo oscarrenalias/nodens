@@ -4,10 +4,11 @@
 var HttpClient = require('../../lib/simplehttpclient.js'),
     client = new HttpClient(),
     Q = require('q'),
+	_ = require('underscore'),
     Backend = require('../../lib/backend.js'),
     config = {	// custom store configuration
         dbPath: './test/db',
-        collName: 'api_integration'
+        collName: _.random(1213231).toString()
     },
     store = new Backend(config),
     testApiServerPort = 8383,
@@ -65,7 +66,7 @@ module.exports = {
         }).fail(failed).finally(test.done);
     },
 
-    "Delete a lookup": function(test) {
+    "Delete a host by its name": function(test) {
         test.expect(1);
         client.delete(testUrl + "/lookup/" + requests[0].name).then(function(result) {
             // it's good enough if something comes back
@@ -73,7 +74,7 @@ module.exports = {
         }).fail(failed).finally(test.done);
     },
 
-    "Query the deleted lookup": function(test) {
+    "Query the deleted host": function(test) {
         test.expect(1);
         client.getAsJson(testUrl + "/lookup/" + requests[0].name).then(function(result) {
             // this shouldn't happen
@@ -99,6 +100,15 @@ module.exports = {
             test.ok(false, "Could not insert two lookups for the same host");
         }).finally(test.done);
     },
+	
+	'Delete a host using its address': function(test) {
+		test.expect(1);
+		client.delete(testUrl + '/lookup/address/' + requests[1].address).then(function(result) {
+			test.ok(true);
+			// If we made it here then it's fine; otherwise we'll have 404 or 500 codes which will trigger a failure
+			test.done();
+		}).finally(test.done);
+	},
 
     // this probably isn't a massively good idea, but I can't get test groups to work (if they did
     // we could set up a single tearDown method for the whole group)
@@ -107,4 +117,3 @@ module.exports = {
         test.done();
     }
 }
-

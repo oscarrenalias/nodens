@@ -65,7 +65,7 @@ module.exports = {
 	
 	"Test deletion based on address": function(test) {
 		test.expect(1);
-		store.deleteHost(testLookups[1].address).then(function() {
+		store.deleteAddress(testLookups[1].address).then(function() {
 			return(store.doLookup('www.test.com'))
 		}).then(function(result) {
 			test.equal(result.length, 1);
@@ -75,7 +75,7 @@ module.exports = {
 	"Test deletion based on name": function(test) {
 		test.expect(1);
 
-		store.deleteLookup(testLookups[0].name).then(function(item) {
+		store.deleteName(testLookups[0].name).then(function(item) {
 			return(store.doLookup('www.test.com'));
 		}).then(function(result) {
 			// there should be none left
