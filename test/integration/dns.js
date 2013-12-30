@@ -16,25 +16,30 @@ var DNSServer = require("../../lib/dns"),
     store = new Backend(config),
     dnsServer = new DNSServer(store);
 
-var dataPromises = [
-    function() { return(store.updateLookup({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 })) },
-    function() { return(store.updateLookup({name: 'www.test1.com', address: '1.2.3.5', ttl: 10, type: 1 })) },
-    function() { return(store.updateLookup({name: 'www.test1.com', address: '1.2.3.6', ttl: 10, type: 1 })) }
-];
+// Sets up the tests; works well, but unfortunately all tests have to
+// do a .then() on this method to ensure that promises are all complete
+// before tests run
+function setUp() {
+	return(Q.all([
+		store.updateLookup({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 }),
+		store.updateLookup({name: 'www.test1.com', address: '1.2.3.5', ttl: 10, type: 1 }),
+		store.updateLookup({name: 'www.test1.com', address: '1.2.3.6', ttl: 10, type: 1 })
+	]))
+}
+	
 // Some promise magic - get all data added, in sequence
-var testData = dataPromises.reduce(Q.when, Q());
+//var testData = dataPromises.reduce(Q.when, Q());
 
 // Start the test DNS server
 dnsServer.serve(testDnsPort);
 
 module.exports = {
-    // tests depend on the completion of the promise that inserts the data to storage... otherwise
+    // Tests depend on the completion of the promise that inserts the data to storage... otherwise
     // thy'll fail because they try to run themselves before data is inserted
-    // TODO: this is currently not working
     "Simple query, existing lookup": function(test) {
         test.expect(1);
-        testData.then(function() {
-            return dnsClient.resolve('www.test.com')
+        setUp().then(function() {
+            return dnsClient.resolve({name: 'www.test.com', type: 'A'})
         }).then(function(response) {
             test.equals('1.2.3.4', response[0].address);
         }).finally(test.done);            
@@ -42,8 +47,8 @@ module.exports = {
 
     "Query for a host with two IP addresses": function(test) {
         test.expect(1);
-        testData.then(function() {
-            return(dnsClient.resolve('www.test1.com'));
+        setUp().then(function() {
+            return(dnsClient.resolve({name: 'www.test1.com', type: 'A'}));
         }).then(function(response) {
             test.equals(response.length, 2); 
         }).finally(test.done);
