@@ -19,16 +19,13 @@ var DNSServer = require("../../lib/dns"),
 // Sets up the tests; works well, but unfortunately all tests have to
 // do a .then() on this method to ensure that promises are all complete
 // before tests run
-function setUp() {
+var setUp = (function() {
 	return(Q.all([
 		store.updateLookup({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 }),
 		store.updateLookup({name: 'www.test1.com', address: '1.2.3.5', ttl: 10, type: 1 }),
 		store.updateLookup({name: 'www.test1.com', address: '1.2.3.6', ttl: 10, type: 1 })
 	]))
-}
-	
-// Some promise magic - get all data added, in sequence
-//var testData = dataPromises.reduce(Q.when, Q());
+})();
 
 // Start the test DNS server
 dnsServer.serve(testDnsPort);
@@ -38,7 +35,7 @@ module.exports = {
     // thy'll fail because they try to run themselves before data is inserted
     "Simple query, existing lookup": function(test) {
         test.expect(1);
-        setUp().then(function() {
+        setUp.then(function() {
             return dnsClient.resolve({name: 'www.test.com', type: 'A'})
         }).then(function(response) {
             test.equals('1.2.3.4', response[0].address);
@@ -47,7 +44,7 @@ module.exports = {
 
     "Query for a host with two IP addresses": function(test) {
         test.expect(1);
-        setUp().then(function() {
+        setUp.then(function() {
             return(dnsClient.resolve({name: 'www.test1.com', type: 'A'}));
         }).then(function(response) {
             test.equals(response.length, 2); 
