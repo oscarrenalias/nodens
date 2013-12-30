@@ -94,6 +94,7 @@ module.exports = {
             return(client.getAsJson(testUrl + "/lookup/" + requests[2].name));
             test.ok(true);
         }).then(function(results) {
+			logger.error("FOO = " + JSON.stringify(results));
             test.equals(2, results.length);
         }).fail(function(err) {
             test.ok(false, "Could not insert two lookups for the same host");
