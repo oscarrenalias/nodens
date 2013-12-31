@@ -144,3 +144,4 @@ Roadmap
 The following features are in the pipeline:
 
 - Honor the "expires" attribute
+- Implement real round-robin
