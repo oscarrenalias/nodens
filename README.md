@@ -8,6 +8,7 @@ Current features:
 - Basic resolution of DNS queries
 - Proxying of requests to a real DNS server
 - Simple form of round-robin (more like random order of responses)
+- Ability to provide an 'expires' value so that name records automatically expire
 
 Keep in mind that only the following DNS record types are supported: A, AAAA, NS, CNAME, PTR, NAPTR, TXT, MX, SRV, SOA
 
@@ -26,13 +27,13 @@ The last command should generate a response resolving "www.test.com" to "1.2.3.4
 
 Default port for the DNS server is 15353 and for the REST API is 8053. See below in the configuration section for more information on how to change the ports.
 
-Use cases for nodedns
+Use cases for nodens
 =====================
 NodeNS grew from the need to scratch an itch: a simple, lightweight and easy to use DNS server to support Docker environments so that Docker containers could register themselves in a DNS server as they are started, and other containers could access them using a known hostname rather than changing IP addresses.
 
 Please note that this use case is not strictly related to Docker and can also be used in any other type of virtual machine environment.
 
-What nodedns is not
+What nodens is not
 ===================
 NodeNS is not (and will never try to be) a production-grade DNS server.
 
@@ -135,6 +136,16 @@ dns: {
 ```
 Only one IP address of an upstream DNS server can be set in the configuration. If the server is not available or can be reached, proxied requests will fail accordingly.
 
+Currently only one configuration key is available for the API layer:
+
+```
+api: {
+    defaultExpires: 3600
+}
+```
+
+defaultExpires is the default validity period value, in seconds, that will be given to requests with records that do not provide one.
+
 Running in Docker
 =================
 TODO: Docker support is currently in progress.
@@ -143,5 +154,4 @@ Roadmap
 =======
 The following features are in the pipeline:
 
-- Honor the "expires" attribute
 - Implement real round-robin
