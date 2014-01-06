@@ -21,9 +21,9 @@ var DNSServer = require("../../lib/dns"),
 // before tests run
 var setUp = (function() {
 	return(Q.all([
-		store.updateLookup({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1 }),
-		store.updateLookup({name: 'www.test1.com', address: '1.2.3.5', ttl: 10, type: 1 }),
-		store.updateLookup({name: 'www.test1.com', address: '1.2.3.6', ttl: 10, type: 1 })
+		store.updateLookup({name: 'www.test.com', address: '1.2.3.4', ttl: 10, type: 1, expires: '3600' }),
+		store.updateLookup({name: 'www.test1.com', address: '1.2.3.5', ttl: 10, type: 1, expires: '3600' }),
+		store.updateLookup({name: 'www.test1.com', address: '1.2.3.6', ttl: 10, type: 1, expires: '3600' })
 	]))
 })();
 

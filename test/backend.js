@@ -29,6 +29,13 @@ var testLookups = [
 		TTL: '10',
 		expires: '3600',
 		type: 1
+	},
+	{	// this is for the test that checks verifies expiration features
+		address: '1.2.3.7',
+		name: 'www.expires.com',
+		TTL: '10',
+		expires: '1',
+		type: 1
 	}
 ];
 		
@@ -39,11 +46,12 @@ function failed(err) {
 
 module.exports = {
 	'Test update and lookup': function(test) {
-		test.expect(1);
+		test.expect(2);
 		store.updateLookup(testLookups[0]).then(function(item) {
 			return(store.doLookup('www.test.com'));
 		}).then(function(result) {;
-			test.equal(result[0].address, testLookups[0].address);
+			test.equal(result.length, 1);
+            test.equal(result[0].address, testLookups[0].address);
 		}).fail(failed).finally(test.done);
 	},
 
@@ -81,5 +89,16 @@ module.exports = {
 			// there should be none left
 			test.equal(result.length, 0);
 		}).fail(failed).finally(test.done);
+	},
+	
+	'Test expiration': function(test) {
+		test.expect(1);
+		
+		store.updateLookup(testLookups[3]).then(function() {
+			return(store.doLookup('www.expired.com'))
+		}).then(function(result) {
+            // there should be no results because the record has already expired
+            test.equal(result.length, 0);
+        }).fail(failed).finally(test.done);
 	}
 }

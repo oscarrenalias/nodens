@@ -11,6 +11,11 @@ module.exports = {
         dns: 15353
     },
 
+    api: {
+        // default expiration value if requests do not contain one (in seconds)
+        defaultExpires: 3600
+    },
+
     dns: {
         // configuration for the DNS upstream
         upstream: {
