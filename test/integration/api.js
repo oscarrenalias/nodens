@@ -108,12 +108,5 @@ module.exports = {
 			// If we made it here then it's fine; otherwise we'll have 404 or 500 codes which will trigger a failure
 			test.done();
 		}).finally(test.done);
-	},
-
-    // this probably isn't a massively good idea, but I can't get test groups to work (if they did
-    // we could set up a single tearDown method for the whole group)
-    "Tear down": function(test) {
-        apiServer.close();
-        test.done();
-    }
+	}
 }
