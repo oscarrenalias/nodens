@@ -8,7 +8,7 @@ Current features:
 - Basic resolution of DNS queries
 - Proxying of requests to a real DNS server
 - Simple form of round-robin (more like random order of responses)
-- Ability to provide an 'expires' value so that name records automatically expire
+- Ability to provide an 'expires' value so that name records automatically expire after a certain period of time
 
 Keep in mind that only the following DNS record types are supported: A, AAAA, NS, CNAME, PTR, NAPTR, TXT, MX, SRV, SOA
 
@@ -145,6 +145,12 @@ api: {
 ```
 
 defaultExpires is the default validity period value, in seconds, that will be given to requests with records that do not provide one.
+
+Name record expiration
+======================
+Providing a value for the 'expires' field in any request, or using the default one (1h) tells Nodens to ignore records in queries after a set period of time. This is useful in scenarios where we do not have shutdown hooks for virtual machines or Docker containers but we still want the name server to not return non-existent hosts in responses.
+
+The recommended approach is to set low 'expires' values, about 60 seconds, and then have a cron job that refreshes the name record before the time is up. The lower the 'expires' value is, the faster non-existent records will be ignored by the name server.
 
 Running in Docker
 =================
