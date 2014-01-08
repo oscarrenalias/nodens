@@ -154,7 +154,47 @@ The recommended approach is to set low 'expires' values, about 60 seconds, and t
 
 Running in Docker
 =================
-TODO: Docker support is currently in progress.
+As part of the source tree the project provides a Vagrantfile to bootstrap a Docker environment where to run NodeNS, and a Dockerfile that will build a Docker image that can will automatically configure and run NodeNS. 
+
+Starting the Vagrant host
+-------------------------
+Running the Vagrant host is not necessary if you're running NodeNS on a Linux-based operating system that supports Docker natively, so skip to the next step. 
+
+The Vagrantfile requires Vagrant 1.4 or newer, please install the correct version for your operating system if you have not done it yet. At the end of the process, the Vagrant host has its own IP address 192.168.33.100, user *vagrant* and password *vagrant*. The project's source code is visible inside the Vagrant container under /home/vagrant/nodens.
+
+The Vagrant host is built on Ubuntu 13.10 using the official Vagrant box provided by Canonical. 
+
+Once Vagrant is installed, open a command prompt and run ```vagrant up``` from the same folder where the project code is located (there should be a Vagrantfile present in that folder). If this is the first time you start the host, it will probably have to download the base Vagrant Ubuntu box so it will take about 10 minutes.
+
+Once the process is completed, if there were no errors, run ```vagrant ssh``` to log into the Vagrant host. If running in Windows without a Cygwin prompt, use your SSH client to connect to 192.168.33.100 with user *vagrant* and password *vagrant*.
+
+Building and running the Docker container
+-----------------------------------------
+Once inside the Vagrant host, go to folder */home/vagrant/nodens* and run the following command to build the Docker image:
+
+```sudo docker build -t nodens/nodens .```
+
+About 5 minutes later, the container should be ready to run:
+
+```sudo docker run -d nodens/nodens```
+
+This command will only output the container identifier; we can verify that the container is running:
+
+```sudo docker ps```
+
+There should be at least one container running, copy the value under column "CONTAINER ID".
+
+The Docker container runs NodeNS as a daemon. Find out the IP address with ```sudo docker inspect <container-id> | grep IPAddress```, note the IP address; add some data and then test a DNS query:
+
+```
+curl -X PUT -H "Content-Type: application/json" http://<container-ip>:8053/lookup -d '{ "address": "1.2.3.4", "name": "www.test.com", "ttl": "10", "expires": "3600", "type": 1 }'
+dig @<container-ip> -p 15353 www.test.com
+dig @<container-ip> -p 15353 www.google.com
+```
+
+The first dig command should return 1.2.3.4 while the second one should send the request to the upstream DNS server and return the IP addresses that handle www.google.com.
+
+The container also runs an SSH daemon so that we can log into it and check what's going on, use *root* and *password* to log in.
 
 Roadmap
 =======
