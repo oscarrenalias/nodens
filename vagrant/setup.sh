@@ -14,8 +14,5 @@ echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docke
 echo "Running apt-get update"
 apt-get update
 echo "Installing docker"
-# TODO: 0.7.3 currently has a regression that causes commands that use apt-get to fail in the container...
-# See https://github.com/dotcloud/docker/issues/3449. Downgrading to 0.7.2 fixes the issue, so we'll
-# stick to that for the time being
-apt-get install -y lxc-docker-0.7.2
+apt-get install -y lxc-docker
 echo "Done"
