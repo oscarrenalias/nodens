@@ -201,6 +201,8 @@ Roadmap
 The following features are in the pipeline:
 
 - Implement real round-robin
+- Clean up tests
+- API request validation, i.e. check for valid parameter values, etc
 
 License
 =======
