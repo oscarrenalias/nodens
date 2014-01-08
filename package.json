@@ -25,5 +25,8 @@
 	},
   	"engines": {
     	"node": "~0.10.5"
+	},
+	"scripts": {
+		"test": "grunt test integration-test"
 	}
 }
