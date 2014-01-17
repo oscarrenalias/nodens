@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/oscarrenalias/nodens.png?branch=master)](https://travis-ci.org/oscarrenalias/nodens)
+
 Introduction
 ============
 Nodens is a very simple DNS server built on DNS that exposes a RESTful API that allows clients to maintain the DNS lookup data.
