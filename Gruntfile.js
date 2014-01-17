@@ -3,22 +3,20 @@ module.exports = function(grunt) {
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
-  // Time how long tasks take. Can help when optimizing build times
-  require('time-grunt')(grunt);
-
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     concurrent: {
         server: {
-            tasks: ['nodemon', 'watch', 'test'],
+            tasks: ['nodemon', 'watch' ],
             options: {
                 logConcurrentOutput: true
             }
         }
     },
 
+	// Restart the server if any of these files changes
     nodemon: {
         dev: {
           options: {
@@ -42,23 +40,18 @@ module.exports = function(grunt) {
     },
 
     nodeunit: {
-      unit: ['test/*.js'],
-      integration: [ 'test/integration/*.js']
+		// unit tests
+      	unit: ['test/*.js'],
+		// integration test suite
+      	integration: [ 'test/integration/*.js']
     },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
-      js: {
-        files: ['app.js, lib/*.js'],
-        tasks: ['jshint', 'test']
-      },
-      jsTest: {
-        files: ['test/*.js'],
-        tasks: ['jshint', 'test']
-      },
-      gruntfile: {
-        files: ['Gruntfile.js']
-      }
+		all: {
+			files: [ '**/*.js' ],
+			tasks: [ 'test', 'integration-test' ]
+		}
     }   
   });
 
