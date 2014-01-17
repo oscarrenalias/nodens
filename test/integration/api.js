@@ -105,8 +105,6 @@ module.exports = {
 		test.expect(1);
 		client.delete(testUrl + '/lookup/address/' + requests[1].address).then(function(result) {
 			test.ok(true);
-			// If we made it here then it's fine; otherwise we'll have 404 or 500 codes which will trigger a failure
-			test.done();
 		}).finally(test.done);
 	}
 }
