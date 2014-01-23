@@ -21,7 +21,8 @@
 	    "grunt-newer": "~0.5.4",
 	    "grunt-contrib-nodeunit": "0.2.x",
 	    "load-grunt-tasks": "~0.2.0",
-	    "time-grunt": "~0.2.1"
+	    "time-grunt": "~0.2.1",
+        "promise-http-client": "0.1.x"
 	},
   	"engines": {
     	"node": "~0.10.5"

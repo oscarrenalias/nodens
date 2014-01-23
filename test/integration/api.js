@@ -1,14 +1,15 @@
 //
 // Integration tests for the REST API
 //
-var HttpClient = require('../../lib/simplehttpclient.js'),
+var HttpClient = require('promise-http-client'),
     client = new HttpClient(),
     Q = require('q'),
 	_ = require('underscore'),
     Backend = require('../../lib/backend.js'),
+    TestHelpers = require('../utils/utils'),
     config = {	// custom store configuration
-        dbPath: './test/db',
-        collName: _.random(1213231).toString()
+        dbPath: TestHelpers.getDbPath(),
+        collName: TestHelpers.getCollName()
     },
     store = new Backend(config),
     testApiServerPort = 8383,

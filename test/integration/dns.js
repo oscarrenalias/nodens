@@ -8,9 +8,10 @@ var DNSServer = require("../../lib/dns"),
     dnsClient = new DNSClient({ address: '127.0.0.1', port: testDnsPort, type: 'udp' }),
     logger = require('log4js').getLogger('net.renalias.nodens.tests.api'),
     dns = require('native-dns'),
+    TestHelpers = require('../utils/utils'),
     config = {  // custom store configuration
-        dbPath: './test/db',
-        collName: 'dns_integration'
+        dbPath: TestHelpers.getDbPath(),
+        collName: TestHelpers.getCollName()
     },
     Backend = require('../../lib/backend.js'),
     store = new Backend(config),

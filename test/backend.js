@@ -1,10 +1,10 @@
 var assert = require('assert'),
 	Backend = require('../lib/backend.js'),
 	_ = require('underscore'),
+    TestHelpers = require('../utils/utils'),
 	config = {	// custom store configuration
-		dbPath: './test/db',
-		// Poor man's random collection name generator
-		collName: _.random(1233918319312).toString()
+		dbPath: TestHelpers.getDbPath(),
+		collName: TestHelpers.getCollName()
 	},
 	store = new Backend(config);
 
