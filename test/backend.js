@@ -1,7 +1,7 @@
 var assert = require('assert'),
 	Backend = require('../lib/backend.js'),
 	_ = require('underscore'),
-    TestHelpers = require('../utils/utils'),
+    TestHelpers = require('./utils/utils'),
 	config = {	// custom store configuration
 		dbPath: TestHelpers.getDbPath(),
 		collName: TestHelpers.getCollName()
